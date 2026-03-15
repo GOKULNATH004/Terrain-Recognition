@@ -12,6 +12,31 @@ Unlike standard CNNs that stack convolutions sequentially, XCNN allows informati
 - ✅ 5-15% higher accuracy
 - ✅ Faster training convergence
 
+## ⚡ Quick Start
+
+Get up and running in 3 steps:
+
+### Step 1: Install & Prepare
+```bash
+pip install -r requirements.txt
+# Add your terrain images to dataset/ folder
+```
+
+### Step 2: Train Model
+```bash
+cd model
+python train.py
+```
+Model trains on your GPU (or CPU). Best checkpoint saved automatically.
+
+### Step 3: Use Web Interface
+```bash
+streamlit run app.py
+```
+Open browser → Upload images → Get predictions! 🎯
+
+**That's it!** You now have a working terrain recognition AI. 🚀
+
 ## Project Structure
 
 ```
@@ -74,6 +99,14 @@ dataset/
     └── ...
 ```
 
+### 3. (Optional) Install Additional Dependencies
+
+For Streamlit web interface (already in requirements.txt):
+
+```bash
+pip install streamlit>=1.28.0
+```
+
 ## Usage
 
 ### Training
@@ -96,6 +129,29 @@ python train.py
 - `model/checkpoints/best_model.pth`: Best model based on validation accuracy
 - `model/checkpoints/checkpoint_epoch_*.pth`: Checkpoints every N epochs
 - `model/checkpoints/final_model.pth`: Final model after training
+
+### Web Interface (Streamlit)
+
+Launch the interactive web UI:
+
+```bash
+streamlit run app.py
+```
+
+**Features:**
+- 🖼️ **Upload Images**: Drag & drop or select terrain images
+- 🎯 **Instant Predictions**: Real-time terrain classification
+- 📊 **Confidence Scores**: Visualize probability for all classes
+- ⚙️ **Adjustable Settings**: Confidence threshold, probability display
+- 📱 **Responsive Design**: Works on desktop and mobile
+- 🚀 **Fast**: Loads model once, caches for performance
+
+**Usage:**
+1. Open Streamlit app (runs on `localhost:8501`)
+2. Upload a terrain image (JPG, PNG, BMP)
+3. View prediction with confidence score
+4. See detailed probability breakdown
+5. Adjust confidence threshold in sidebar
 
 ### Making Predictions
 
@@ -125,6 +181,18 @@ from model.predict import load_model, predict_batch
 results = predict_batch(model, 'path/to/image/directory', device)
 for result in results:
     print(f"{result['filename']}: {result['class']} ({result['confidence']:.2f}%)")
+```
+
+#### Using the Simplified Interface:
+
+```python
+from model.inference import TerrainPredictor
+
+predictor = TerrainPredictor()
+result = predictor.predict('path/to/image.jpg')
+print(f"Terrain: {result['class']}")
+print(f"Confidence: {result['confidence']:.2f}%")
+print(f"Probabilities: {result['probabilities']}")
 ```
 
 ### Using the Jupyter Notebook
